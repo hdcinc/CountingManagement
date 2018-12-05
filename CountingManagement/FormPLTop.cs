@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace CountingManagement
 {
-    public partial class Form1 : Form
+    public partial class FormPLTop : Form
     {
-        public Form1()
+        public FormPLTop()
         {
             InitializeComponent();
         }

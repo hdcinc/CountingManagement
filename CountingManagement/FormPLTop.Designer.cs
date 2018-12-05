@@ -1,6 +1,6 @@
 ﻿namespace CountingManagement
 {
-    partial class Form1
+    partial class FormPLTop
     {
         /// <summary>
         /// 必要なデザイナー変数です。
