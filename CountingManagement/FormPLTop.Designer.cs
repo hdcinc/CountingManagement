@@ -28,35 +28,40 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.reoGridControl1 = new unvell.ReoGrid.ReoGridControl();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // reoGridControl1
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(35, 26);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 21;
-            this.dataGridView1.Size = new System.Drawing.Size(356, 209);
-            this.dataGridView1.TabIndex = 0;
+            this.reoGridControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.reoGridControl1.CellContextMenuStrip = null;
+            this.reoGridControl1.ColCount = 100;
+            this.reoGridControl1.ColHeadContextMenuStrip = null;
+            this.reoGridControl1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.reoGridControl1.Location = new System.Drawing.Point(0, 0);
+            this.reoGridControl1.Name = "reoGridControl1";
+            this.reoGridControl1.RowCount = 200;
+            this.reoGridControl1.RowHeadContextMenuStrip = null;
+            this.reoGridControl1.Script = null;
+            this.reoGridControl1.Size = new System.Drawing.Size(800, 209);
+            this.reoGridControl1.TabIndex = 0;
+            this.reoGridControl1.Text = "reoGridControl1";
             // 
             // FormPLTop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.dataGridView1);
+            this.ClientSize = new System.Drawing.Size(800, 338);
+            this.Controls.Add(this.reoGridControl1);
             this.Name = "FormPLTop";
             this.Text = "FormPLTop";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private unvell.ReoGrid.ReoGridControl reoGridControl1;
     }
 }
 
