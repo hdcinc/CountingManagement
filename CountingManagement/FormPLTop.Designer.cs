@@ -30,6 +30,7 @@
         {
             this.reoGridControl1 = new unvell.ReoGrid.ReoGridControl();
             this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // reoGridControl1
@@ -63,11 +64,22 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(137, 0);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(131, 64);
+            this.button2.TabIndex = 1;
+            this.button2.Text = "売上総利益_計画_2015へ代入";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // FormPLTop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1017, 423);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.reoGridControl1);
             this.Name = "FormPLTop";
@@ -81,6 +93,7 @@
 
         private unvell.ReoGrid.ReoGridControl reoGridControl1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 

@@ -176,5 +176,12 @@ namespace CountingManagement
 
             MessageBox.Show(sheet.GetCellData("N7").ToString());
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Worksheet sheet = reoGridControl1.CurrentWorksheet;
+
+            sheet["売上総利益_計画_2015"] = 111;
+        }
     }
 }
