@@ -28,9 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.reoGridControl1 = new unvell.ReoGrid.ReoGridControl();
-            this.button1 = new System.Windows.Forms.Button();
+            this.contextMenuStrip_cell = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.button2 = new System.Windows.Forms.Button();
+            this.contextMenuStrip_cell.SuspendLayout();
             this.SuspendLayout();
             // 
             // reoGridControl1
@@ -40,6 +45,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.reoGridControl1.BackColor = System.Drawing.Color.White;
             this.reoGridControl1.ColumnHeaderContextMenuStrip = null;
+            this.reoGridControl1.ContextMenuStrip = this.contextMenuStrip_cell;
             this.reoGridControl1.LeadHeaderContextMenuStrip = null;
             this.reoGridControl1.Location = new System.Drawing.Point(0, 70);
             this.reoGridControl1.Name = "reoGridControl1";
@@ -54,19 +60,40 @@
             this.reoGridControl1.TabIndex = 0;
             this.reoGridControl1.Text = "reoGridControl1";
             // 
-            // button1
+            // contextMenuStrip_cell
             // 
-            this.button1.Location = new System.Drawing.Point(0, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(131, 64);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.contextMenuStrip_cell.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItem1,
+            this.ToolStripMenuItem2,
+            this.ToolStripMenuItem3});
+            this.contextMenuStrip_cell.Name = "contextMenuStrip_cell";
+            this.contextMenuStrip_cell.Size = new System.Drawing.Size(156, 70);
+            this.contextMenuStrip_cell.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_cell_Opening);
+            // 
+            // ToolStripMenuItem1
+            // 
+            this.ToolStripMenuItem1.Name = "ToolStripMenuItem1";
+            this.ToolStripMenuItem1.Size = new System.Drawing.Size(155, 22);
+            this.ToolStripMenuItem1.Text = "行を挿入";
+            this.ToolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
+            // 
+            // ToolStripMenuItem2
+            // 
+            this.ToolStripMenuItem2.Name = "ToolStripMenuItem2";
+            this.ToolStripMenuItem2.Size = new System.Drawing.Size(155, 22);
+            this.ToolStripMenuItem2.Text = "合計値を設定";
+            this.ToolStripMenuItem2.Click += new System.EventHandler(this.ToolStripMenuItem2_Click);
+            // 
+            // ToolStripMenuItem3
+            // 
+            this.ToolStripMenuItem3.Name = "ToolStripMenuItem3";
+            this.ToolStripMenuItem3.Size = new System.Drawing.Size(155, 22);
+            this.ToolStripMenuItem3.Text = "詳細画面を表示";
+            this.ToolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(137, 0);
+            this.button2.Location = new System.Drawing.Point(0, 0);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(131, 64);
             this.button2.TabIndex = 1;
@@ -80,11 +107,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1017, 423);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.reoGridControl1);
             this.Name = "FormPLTop";
             this.Text = "FormPLTop";
             this.Load += new System.EventHandler(this.FormPLTop_Load);
+            this.contextMenuStrip_cell.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -92,8 +119,11 @@
         #endregion
 
         private unvell.ReoGrid.ReoGridControl reoGridControl1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip_cell;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem3;
     }
 }
 
