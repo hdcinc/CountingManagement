@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<grid xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <head>
+    <meta>
+      <culture>ja-JP</culture>
+      <editor>ReoGrid Core</editor>
+      <core-ver>2.1.0.0</core-ver>
+    </meta>
+    <rows>200</rows>
+    <cols>100</cols>
+    <default-row-height>20</default-row-height>
+    <default-col-width>70</default-col-width>
+    <settings meta="30475026398" />
+    <script />
+  </head>
+  <style font="Calibri" font-size="10.25" align="general" valign="middle" />
+  <rows />
+  <cols />
+  <v-borders>
+    <v-border row="5" col="1" pos="left" rows="1" />
+    <v-border row="7" col="2" pos="left" rows="1" />
+    <v-border row="5" col="3" pos="right" rows="1" />
+    <v-border row="7" col="3" pos="right" rows="1" />
+  </v-borders>
+  <h-borders>
+    <h-border row="5" col="1" pos="top" cols="2" />
+    <h-border row="6" col="1" pos="bottom" cols="2" />
+    <h-border row="7" col="2" pos="top" cols="1" />
+    <h-border row="8" col="2" pos="bottom" cols="1" />
+  </h-borders>
+  <cells>
+    <cell row="1" col="1">aaa<style bgcolor="#ff9900" /></cell>
+    <cell row="2" col="1">1</cell>
+    <cell row="2" col="2">2</cell>
+    <cell row="3" col="1">3<formula>B3+C3</formula></cell>
+    <cell row="5" col="1" colspan="2">aaaa<style bgcolor="#ffb2b2" /></cell>
+  </cells>
+</grid>

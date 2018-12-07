@@ -29,32 +29,50 @@
         private void InitializeComponent()
         {
             this.reoGridControl1 = new unvell.ReoGrid.ReoGridControl();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // reoGridControl1
             // 
-            this.reoGridControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.reoGridControl1.CellContextMenuStrip = null;
-            this.reoGridControl1.ColCount = 100;
-            this.reoGridControl1.ColHeadContextMenuStrip = null;
-            this.reoGridControl1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.reoGridControl1.Location = new System.Drawing.Point(0, 0);
+            this.reoGridControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.reoGridControl1.BackColor = System.Drawing.Color.White;
+            this.reoGridControl1.ColumnHeaderContextMenuStrip = null;
+            this.reoGridControl1.LeadHeaderContextMenuStrip = null;
+            this.reoGridControl1.Location = new System.Drawing.Point(0, 70);
             this.reoGridControl1.Name = "reoGridControl1";
-            this.reoGridControl1.RowCount = 200;
-            this.reoGridControl1.RowHeadContextMenuStrip = null;
+            this.reoGridControl1.RowHeaderContextMenuStrip = null;
             this.reoGridControl1.Script = null;
-            this.reoGridControl1.Size = new System.Drawing.Size(800, 209);
+            this.reoGridControl1.SheetTabContextMenuStrip = null;
+            this.reoGridControl1.SheetTabNewButtonVisible = true;
+            this.reoGridControl1.SheetTabVisible = false;
+            this.reoGridControl1.SheetTabWidth = 60;
+            this.reoGridControl1.ShowScrollEndSpacing = true;
+            this.reoGridControl1.Size = new System.Drawing.Size(1017, 353);
             this.reoGridControl1.TabIndex = 0;
             this.reoGridControl1.Text = "reoGridControl1";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(131, 64);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // FormPLTop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 338);
+            this.ClientSize = new System.Drawing.Size(1017, 423);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.reoGridControl1);
             this.Name = "FormPLTop";
             this.Text = "FormPLTop";
+            this.Load += new System.EventHandler(this.FormPLTop_Load);
             this.ResumeLayout(false);
 
         }
@@ -62,6 +80,7 @@
         #endregion
 
         private unvell.ReoGrid.ReoGridControl reoGridControl1;
+        private System.Windows.Forms.Button button1;
     }
 }
 
