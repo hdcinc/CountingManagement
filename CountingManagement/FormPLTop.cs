@@ -38,10 +38,9 @@ namespace CountingManagement
 
         private void Sheet_CellKeyUp(object sender, unvell.ReoGrid.Events.CellKeyDownEventArgs e)
         {
-            Console.WriteLine("Sheet_CellKeyUp");
-
             if (e.KeyCode == unvell.ReoGrid.Interaction.KeyCode.Delete)
             {
+                // DeleteキーでCellDataChangedが発生しないので
                 unvell.ReoGrid.Events.CellEventArgs eventArgs = new unvell.ReoGrid.Events.CellEventArgs(worksheet.GetCell(worksheet.FocusPos));
                 Sheet_CellDataChanged(sender, eventArgs);
             }
@@ -49,26 +48,40 @@ namespace CountingManagement
 
         private void Sheet_CellDataChanged(object sender, unvell.ReoGrid.Events.CellEventArgs e)
         {
-            Console.WriteLine("Sheet_CellDataChanged");
-
-            switch (e.Cell.Address)
+            switch (worksheet.GetNameByRange(e.Cell.Address))
             {
-                case "N7":
-                    if (worksheet.GetCell("N13").Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
+                case "売上_計画_1":
+
+                    worksheet.CellDataChanged -= Sheet_CellDataChanged;
+
+                    if (worksheet.GetCell("売上総利益_計画_1").Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
                     {
-                        worksheet.GetCell("N13").Data = ConvertCellData(worksheet.GetCellData("N7")) - ConvertCellData(worksheet.GetCellData("N10"));
+                        worksheet["売上総利益_計画_1"] = ConvertCellData(worksheet["売上_計画_1"]) - ConvertCellData(worksheet["売上原価_計画_1"]);
                     }
-                    if (worksheet.GetCell("N19").Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
+                    if (worksheet.GetCell("営業利益_計画_1").Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
                     {
-                        worksheet.GetCell("N19").Data = ConvertCellData(worksheet.GetCellData("N13")) - ConvertCellData(worksheet.GetCellData("N16"));
+                        worksheet["営業利益_計画_1"] = ConvertCellData(worksheet["売上総利益_計画_1"]) - ConvertCellData(worksheet["販管費_計画_1"]);
+                    }
+                    if (worksheet.GetCell("経常利益_計画_1").Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
+                    {
+                        worksheet["経常利益_計画_1"] = ConvertCellData(worksheet["営業利益_計画_1"]) + ConvertCellData(worksheet["営業外収益_計画_1"]) - ConvertCellData(worksheet["営業外費用_計画_1"]);
+                    }
+                    if (worksheet.GetCell("税引前当期純利益_計画_1").Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
+                    {
+                        worksheet["税引前当期純利益_計画_1"] = ConvertCellData(worksheet["経常利益_計画_1"]) + ConvertCellData(worksheet["特別利益_計画_1"]) - ConvertCellData(worksheet["特別損失_計画_1"]);
+                    }
+                    if (worksheet.GetCell("当期純利益_計画_1").Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
+                    {
+                        worksheet["当期純利益_計画_1"] = ConvertCellData(worksheet["税引前当期純利益_計画_1"]) - ConvertCellData(worksheet["法人税等_計画_1"]);
                     }
 
+                    worksheet.CellDataChanged += Sheet_CellDataChanged;
 
 
                     break;
-                case "N13":
+                case "売上総利益_計画_1":
 
-                    Decimal calValue = ConvertCellData(worksheet.GetCellData("N7")) - ConvertCellData(worksheet.GetCellData("N10"));
+                    Decimal calValue = ConvertCellData(worksheet["売上_計画_1"]) - ConvertCellData(worksheet["売上原価_計画_1"]);
                     Decimal newValue = ConvertCellData(e.Cell.Data);
 
                     WorksheetRangeStyle style = new WorksheetRangeStyle();
@@ -81,7 +94,7 @@ namespace CountingManagement
                     {
                         style.BackColor = CELL_BACK_COLOR_EDIT_ONLY;
                     }
-                    worksheet.SetRangeStyles("N13", style);
+                    worksheet.SetRangeStyles("売上総利益_計画_1", style);
 
                     break;
                 default:
