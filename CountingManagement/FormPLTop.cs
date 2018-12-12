@@ -70,6 +70,22 @@ namespace CountingManagement
             return false;
         }
 
+        public enum NameInTheCell
+        {
+            /// <summary>
+            /// 勘定科目
+            /// </summary>
+            AccountTitle,
+            /// <summary>
+            /// 予実
+            /// </summary>
+            PlanResult,
+            /// <summary>
+            /// 年度列番号
+            /// </summary>
+            BusinessYearColumn
+        }
+
         private void Sheet_CellDataChanged(object sender, unvell.ReoGrid.Events.CellEventArgs e)
         {
 
@@ -86,68 +102,41 @@ namespace CountingManagement
             // セル名を取得する
             // ===================================================================
 
-            string[] names = worksheet.GetNameByRange(e.Cell.Address).Split('_');
+            string[] splitedNames = worksheet.GetNameByRange(e.Cell.Address).Split('_');
+
+            Dictionary<NameInTheCell, string> names = new Dictionary<NameInTheCell, string>();
+            names.Add(NameInTheCell.AccountTitle, splitedNames[0]);
+            names.Add(NameInTheCell.PlanResult, splitedNames[1]);
+            names.Add(NameInTheCell.BusinessYearColumn, splitedNames[2]);
 
             // ===================================================================
             // セルの入力値によって入力されたセルの色を変える
             // ===================================================================
 
-            //Decimal calValue = 0;
-            //Decimal newValue = ConvertCellData(e.Cell.Data);
-
-            //switch (worksheet.GetNameByRange(e.Cell.Address))
-            //{
-            //    case "売上総利益_計画_1":
-
-            //        calValue = ConvertCellData(worksheet.GetCell("売上_計画_1").Data) - ConvertCellData(worksheet.GetCell("売上原価_計画_1").Data);
-
-            //        break;
-
-            //    case "営業利益_計画_1":
-
-            //        calValue = ConvertCellData(worksheet.GetCell("売上総利益_計画_1").Data) - ConvertCellData(worksheet.GetCell("販管費_計画_1").Data);
-
-            //        break;
-
-            //    case "経常利益_計画_1":
-
-            //        calValue = ConvertCellData(worksheet.GetCell("営業利益_計画_1").Data) + ConvertCellData(worksheet.GetCell("営業外収益_計画_1").Data) - ConvertCellData(worksheet.GetCell("営業外費用_計画_1").Data);
-
-            //        break;
-
-            //}
-
-            //e.Cell.Style.BackColor = (calValue == newValue) ? CELL_BACK_COLOR_EDIT_ABLE : CELL_BACK_COLOR_EDIT_ONLY;
-
-
-
-            switch (worksheet.GetNameByRange(e.Cell.Address))
+            switch (names[NameInTheCell.AccountTitle])
             {
-                case "売上総利益_計画_1":
-                case "営業利益_計画_1":
-                case "経常利益_計画_1":
+                case "売上総利益":
+                case "営業利益":
+                case "経常利益":
 
                     Decimal calValue = 0;
-                    Decimal newValue = ConvertCellData(e.Cell.Data);
+                    Decimal newValue = ConvertCell(e.Cell.Data);
 
-                    switch (worksheet.GetNameByRange(e.Cell.Address))
+                    switch (names[NameInTheCell.AccountTitle])
                     {
-                        case "売上総利益_計画_1":
+                        case "売上総利益":
 
-                            calValue = ConvertCellData(worksheet.GetCell("売上_計画_1").Data) - ConvertCellData(worksheet.GetCell("売上原価_計画_1").Data);
-
+                            calValue = Calculate売上総利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
                             break;
 
-                        case "営業利益_計画_1":
+                        case "営業利益":
 
-                            calValue = ConvertCellData(worksheet.GetCell("売上総利益_計画_1").Data) - ConvertCellData(worksheet.GetCell("販管費_計画_1").Data);
-
+                            calValue = Calculate営業利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
                             break;
 
-                        case "経常利益_計画_1":
+                        case "経常利益":
 
-                            calValue = ConvertCellData(worksheet.GetCell("営業利益_計画_1").Data) + ConvertCellData(worksheet.GetCell("営業外収益_計画_1").Data) - ConvertCellData(worksheet.GetCell("営業外費用_計画_1").Data);
-
+                            calValue = Calculate経常利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
                             break;
 
                     }
@@ -158,50 +147,50 @@ namespace CountingManagement
 
             }
 
-
-
             // ===================================================================
             // 他のセルの値を再計算する
             // ===================================================================
 
-            switch (worksheet.GetNameByRange(e.Cell.Address))
+            switch (names[NameInTheCell.AccountTitle])
             {
-                case "売上_計画_1":
-                case "売上原価_計画_1":
-                case "売上総利益_計画_1":
-                case "販管費_計画_1":
-                case "営業利益_計画_1":
-                case "営業外収益_計画_1":
-                case "営業外費用_計画_1":
-                case "経常利益_計画_1":
-                case "特別利益_計画_1":
-                case "特別損失_計画_1":
-                case "税引前当期純利益_計画_1":
-                case "法人税等_計画_1":
-                case "当期純利益_計画_1":
+                case "売上":
+                case "売上原価":
+                case "売上総利益":
+                case "販管費":
+                case "営業利益":
+                case "営業外収益":
+                case "営業外費用":
+                case "経常利益":
+                case "特別利益":
+                case "特別損失":
+                case "税引前当期純利益":
+                case "法人税等":
+                case "当期純利益":
 
                     // セルに値を設定する間、本イベントを発生しないようにする（セルに値を設定するたびに本イベントが発生する）
                     worksheet.CellDataChanged -= Sheet_CellDataChanged;
 
-                    if (worksheet.GetCell("売上総利益_計画_1").Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
+                    string tail = "_" + names[NameInTheCell.PlanResult] + "_" + names[NameInTheCell.BusinessYearColumn];
+
+                    if (worksheet.GetCell("売上総利益"+tail).Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
                     {
-                        worksheet["売上総利益_計画_1"] = ConvertCellData(worksheet.GetCell("売上_計画_1").Data) - ConvertCellData(worksheet.GetCell("売上原価_計画_1").Data);
+                        worksheet["売上総利益"+tail] = Calculate売上総利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
                     }
-                    if (worksheet.GetCell("営業利益_計画_1").Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
+                    if (worksheet.GetCell("営業利益"+tail).Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
                     {
-                        worksheet["営業利益_計画_1"] = ConvertCellData(worksheet.GetCell("売上総利益_計画_1").Data) - ConvertCellData(worksheet.GetCell("販管費_計画_1").Data);
+                        worksheet["営業利益"+tail] = Calculate営業利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
                     }
-                    if (worksheet.GetCell("経常利益_計画_1").Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
+                    if (worksheet.GetCell("経常利益"+tail).Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
                     {
-                        worksheet["経常利益_計画_1"] = ConvertCellData(worksheet.GetCell("営業利益_計画_1").Data) + ConvertCellData(worksheet.GetCell("営業外収益_計画_1").Data) - ConvertCellData(worksheet.GetCell("営業外費用_計画_1").Data);
+                        worksheet["経常利益"+tail] = Calculate経常利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
                     }
-                    if (worksheet.GetCell("税引前当期純利益_計画_1").Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
+                    if (worksheet.GetCell("税引前当期純利益"+tail).Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
                     {
-                        worksheet["税引前当期純利益_計画_1"] = ConvertCellData(worksheet.GetCell("経常利益_計画_1").Data) + ConvertCellData(worksheet.GetCell("特別利益_計画_1").Data) - ConvertCellData(worksheet.GetCell("特別損失_計画_1").Data);
+                        worksheet["税引前当期純利益" + tail] = Calculate税引前当期純利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
                     }
-                    if (worksheet.GetCell("当期純利益_計画_1").Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
+                    if (worksheet.GetCell("当期純利益"+tail).Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
                     {
-                        worksheet["当期純利益_計画_1"] = ConvertCellData(worksheet.GetCell("税引前当期純利益_計画_1").Data) - ConvertCellData(worksheet.GetCell("法人税等_計画_1").Data);
+                        worksheet["当期純利益" + tail] = Calculate当期純利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
                     }
 
                     // セルに値を設定し終わったので、本イベントを発生するようにする
@@ -214,12 +203,47 @@ namespace CountingManagement
 
         }
 
-        private Decimal Calculate売上総利益(string planResult, int businessYearColumn)
+        private Decimal Calculate売上総利益(string planResult, string businessYearColumn)
         {
-            return ConvertCellData(worksheet.GetCell("売上_計画_1").Data) - ConvertCellData(worksheet.GetCell("売上原価_計画_1").Data);
+
+            string tail = "_" + planResult + "_" + businessYearColumn;
+
+            return ConvertCell(worksheet.GetCell("売上" + tail).Data) - ConvertCell(worksheet.GetCell("売上原価" + tail).Data);
         }
 
-        private Decimal ConvertCellData(object cellData)
+        private Decimal Calculate営業利益(string planResult, string businessYearColumn)
+        {
+
+            string tail = "_" + planResult + "_" + businessYearColumn;
+
+            return ConvertCell(worksheet.GetCell("売上総利益" + tail).Data) - ConvertCell(worksheet.GetCell("販管費" + tail).Data);
+        }
+
+        private Decimal Calculate経常利益(string planResult, string businessYearColumn)
+        {
+
+            string tail = "_" + planResult + "_" + businessYearColumn;
+
+            return ConvertCell(worksheet.GetCell("営業利益" + tail).Data) + ConvertCell(worksheet.GetCell("営業外収益" + tail).Data) - ConvertCell(worksheet.GetCell("営業外費用" + tail).Data);
+        }
+
+        private Decimal Calculate税引前当期純利益(string planResult, string businessYearColumn)
+        {
+
+            string tail = "_" + planResult + "_" + businessYearColumn;
+
+            return ConvertCell(worksheet.GetCell("経常利益"+tail).Data) + ConvertCell(worksheet.GetCell("特別利益"+tail).Data) - ConvertCell(worksheet.GetCell("特別損失"+tail).Data);
+        }
+
+        private Decimal Calculate当期純利益(string planResult, string businessYearColumn)
+        {
+
+            string tail = "_" + planResult + "_" + businessYearColumn;
+
+            return ConvertCell(worksheet.GetCell("税引前当期純利益"+tail).Data) - ConvertCell(worksheet.GetCell("法人税等"+tail).Data);
+        }
+
+        private Decimal ConvertCell(object cellData)
         {
             Decimal value = 0;
 
