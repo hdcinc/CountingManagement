@@ -15,6 +15,22 @@ namespace CountingManagement
     public partial class FormPLTop : Form
     {
 
+        public enum CellNameParts
+        {
+            /// <summary>
+            /// 勘定科目
+            /// </summary>
+            AccountTitle,
+            /// <summary>
+            /// 予実
+            /// </summary>
+            PlanResult,
+            /// <summary>
+            /// 年度列番号
+            /// </summary>
+            BusinessYearColumn
+        }
+
         private readonly Color CELL_BACK_COLOR_EDIT_ONLY = Color.FromArgb(255,255,255);
         private readonly Color CELL_BACK_COLOR_EDIT_ABLE = Color.FromArgb(189, 215, 238);
         private readonly Color CELL_BACK_COLOR_READ_ONLY = Color.FromArgb(217, 217, 217);
@@ -46,46 +62,6 @@ namespace CountingManagement
             }
         }
 
-        private bool CanCellInput(Cell cell)
-        {
-            switch (worksheet.GetNameByRange(cell.Address))
-            {
-                case "売上_計画_1":
-                case "売上原価_計画_1":
-                case "売上総利益_計画_1":
-                case "販管費_計画_1":
-                case "営業利益_計画_1":
-                case "営業外収益_計画_1":
-                case "営業外費用_計画_1":
-                case "経常利益_計画_1":
-                case "特別利益_計画_1":
-                case "特別損失_計画_1":
-                case "税引前当期純利益_計画_1":
-                case "法人税等_計画_1":
-                case "当期純利益_計画_1":
-
-                    return true;
-            }
-
-            return false;
-        }
-
-        public enum NameInTheCell
-        {
-            /// <summary>
-            /// 勘定科目
-            /// </summary>
-            AccountTitle,
-            /// <summary>
-            /// 予実
-            /// </summary>
-            PlanResult,
-            /// <summary>
-            /// 年度列番号
-            /// </summary>
-            BusinessYearColumn
-        }
-
         private void Sheet_CellDataChanged(object sender, unvell.ReoGrid.Events.CellEventArgs e)
         {
 
@@ -104,16 +80,16 @@ namespace CountingManagement
 
             string[] splitedNames = worksheet.GetNameByRange(e.Cell.Address).Split('_');
 
-            Dictionary<NameInTheCell, string> names = new Dictionary<NameInTheCell, string>();
-            names.Add(NameInTheCell.AccountTitle, splitedNames[0]);
-            names.Add(NameInTheCell.PlanResult, splitedNames[1]);
-            names.Add(NameInTheCell.BusinessYearColumn, splitedNames[2]);
+            Dictionary<CellNameParts, string> names = new Dictionary<CellNameParts, string>();
+            names.Add(CellNameParts.AccountTitle, splitedNames[0]);
+            names.Add(CellNameParts.PlanResult, splitedNames[1]);
+            names.Add(CellNameParts.BusinessYearColumn, splitedNames[2]);
 
             // ===================================================================
             // セルの入力値によって入力されたセルの色を変える
             // ===================================================================
 
-            switch (names[NameInTheCell.AccountTitle])
+            switch (names[CellNameParts.AccountTitle])
             {
                 case "売上総利益":
                 case "営業利益":
@@ -122,21 +98,21 @@ namespace CountingManagement
                     Decimal calValue = 0;
                     Decimal newValue = ConvertCell(e.Cell.Data);
 
-                    switch (names[NameInTheCell.AccountTitle])
+                    switch (names[CellNameParts.AccountTitle])
                     {
                         case "売上総利益":
 
-                            calValue = Calculate売上総利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
+                            calValue = Calculate売上総利益(names[CellNameParts.PlanResult], names[CellNameParts.BusinessYearColumn]);
                             break;
 
                         case "営業利益":
 
-                            calValue = Calculate営業利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
+                            calValue = Calculate営業利益(names[CellNameParts.PlanResult], names[CellNameParts.BusinessYearColumn]);
                             break;
 
                         case "経常利益":
 
-                            calValue = Calculate経常利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
+                            calValue = Calculate経常利益(names[CellNameParts.PlanResult], names[CellNameParts.BusinessYearColumn]);
                             break;
 
                     }
@@ -151,7 +127,7 @@ namespace CountingManagement
             // 他のセルの値を再計算する
             // ===================================================================
 
-            switch (names[NameInTheCell.AccountTitle])
+            switch (names[CellNameParts.AccountTitle])
             {
                 case "売上":
                 case "売上原価":
@@ -170,27 +146,27 @@ namespace CountingManagement
                     // セルに値を設定する間、本イベントを発生しないようにする（セルに値を設定するたびに本イベントが発生する）
                     worksheet.CellDataChanged -= Sheet_CellDataChanged;
 
-                    string tail = "_" + names[NameInTheCell.PlanResult] + "_" + names[NameInTheCell.BusinessYearColumn];
+                    string tail = "_" + names[CellNameParts.PlanResult] + "_" + names[CellNameParts.BusinessYearColumn];
 
                     if (worksheet.GetCell("売上総利益"+tail).Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
                     {
-                        worksheet["売上総利益"+tail] = Calculate売上総利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
+                        worksheet["売上総利益"+tail] = Calculate売上総利益(names[CellNameParts.PlanResult], names[CellNameParts.BusinessYearColumn]);
                     }
                     if (worksheet.GetCell("営業利益"+tail).Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
                     {
-                        worksheet["営業利益"+tail] = Calculate営業利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
+                        worksheet["営業利益"+tail] = Calculate営業利益(names[CellNameParts.PlanResult], names[CellNameParts.BusinessYearColumn]);
                     }
                     if (worksheet.GetCell("経常利益"+tail).Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
                     {
-                        worksheet["経常利益"+tail] = Calculate経常利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
+                        worksheet["経常利益"+tail] = Calculate経常利益(names[CellNameParts.PlanResult], names[CellNameParts.BusinessYearColumn]);
                     }
                     if (worksheet.GetCell("税引前当期純利益"+tail).Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
                     {
-                        worksheet["税引前当期純利益" + tail] = Calculate税引前当期純利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
+                        worksheet["税引前当期純利益" + tail] = Calculate税引前当期純利益(names[CellNameParts.PlanResult], names[CellNameParts.BusinessYearColumn]);
                     }
                     if (worksheet.GetCell("当期純利益"+tail).Style.BackColor != CELL_BACK_COLOR_EDIT_ONLY)
                     {
-                        worksheet["当期純利益" + tail] = Calculate当期純利益(names[NameInTheCell.PlanResult], names[NameInTheCell.BusinessYearColumn]);
+                        worksheet["当期純利益" + tail] = Calculate当期純利益(names[CellNameParts.PlanResult], names[CellNameParts.BusinessYearColumn]);
                     }
 
                     // セルに値を設定し終わったので、本イベントを発生するようにする
@@ -201,6 +177,95 @@ namespace CountingManagement
                     break;
             }
 
+        }
+
+        private void ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            worksheet.InsertRows(worksheet.FocusPos.Row, 1);
+        }
+
+        private void ToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            Form2 form2 = new Form2();
+            form2.ShowDialog();
+        }
+
+        private void contextMenuStrip_cell_Opening(object sender, CancelEventArgs e)
+        {
+            if (worksheet.FocusPos.ToAddress() == "K13")
+            {
+                // contextMenuStrip_cell.Items[0].Visible = false;
+                e.Cancel = true;
+            }
+            else
+            {
+                contextMenuStrip_cell.Items[0].Visible = true;
+            }
+        }
+
+
+        private bool CanCellInput(Cell cell)
+        {
+            //switch (worksheet.GetNameByRange(cell.Address))
+            //{
+            //    case "売上_計画_1":
+            //    case "売上原価_計画_1":
+            //    case "売上総利益_計画_1":
+            //    case "販管費_計画_1":
+            //    case "営業利益_計画_1":
+            //    case "営業外収益_計画_1":
+            //    case "営業外費用_計画_1":
+            //    case "経常利益_計画_1":
+            //    case "特別利益_計画_1":
+            //    case "特別損失_計画_1":
+            //    case "税引前当期純利益_計画_1":
+            //    case "法人税等_計画_1":
+            //    case "当期純利益_計画_1":
+
+            //        return true;
+            //}
+
+            string[] names = new string[] {
+                "売上_計画_1",
+                "売上原価_計画_1",
+                "売上総利益_計画_1",
+                "販管費_計画_1",
+                "営業利益_計画_1",
+                "営業外収益_計画_1",
+                "営業外費用_計画_1",
+                "経常利益_計画_1",
+                "特別利益_計画_1",
+                "特別損失_計画_1",
+                "税引前当期純利益_計画_1",
+                "法人税等_計画_1",
+                "当期純利益_計画_1",
+
+                "売上_実績_1",
+                "売上原価_実績_1",
+                "売上総利益_実績_1",
+                "販管費_実績_1",
+                "営業利益_実績_1",
+                "営業外収益_実績_1",
+                "営業外費用_実績_1",
+                "経常利益_実績_1",
+                "特別利益_実績_1",
+                "特別損失_実績_1",
+                "税引前当期純利益_実績_1",
+                "法人税等_実績_1",
+                "当期純利益_実績_1",
+            };
+
+            if (names.Contains(worksheet.GetNameByRange(cell.Address)))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private Decimal Calculate売上総利益(string planResult, string businessYearColumn)
@@ -252,31 +317,5 @@ namespace CountingManagement
             return value;
         }
 
-        private void ToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            worksheet.InsertRows(worksheet.FocusPos.Row, 1);
-        }
-
-        private void ToolStripMenuItem2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ToolStripMenuItem3_Click(object sender, EventArgs e)
-        {
-            Form2 form2 = new Form2();
-            form2.ShowDialog();
-        }
-
-        private void contextMenuStrip_cell_Opening(object sender, CancelEventArgs e)
-        {
-            if (worksheet.FocusPos.ToAddress() == "K13") {
-                // contextMenuStrip_cell.Items[0].Visible = false;
-                e.Cancel = true;
-            } else
-            {
-                contextMenuStrip_cell.Items[0].Visible = true;
-            }
-        }
     }
 }
